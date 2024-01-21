@@ -28,12 +28,11 @@ def downloading(message):
     try:
         youtube_video = YouTube(message.text)
         title = youtube_video.title.replace('.', '')
-        title = title.replace("'", '')
-        title = title.replace('|', '')
+
         output_path = "B:/VS CODE/Telegramm bot/Downloaded Videos/"
 
-        youtube_video.streams.first().download(output_path=output_path)
-        video_path = os.path.join(output_path, title + '.mp4')
+        youtube_video.streams.first().download(output_path=output_path, filename = str(number_name) + '.mp4')
+        video_path = os.path.join(output_path, str(number_name) + '.mp4')
         print(video_path)
         with open(video_path, 'rb') as video:
             bot.send_video(message.chat.id, video)
@@ -41,8 +40,15 @@ def downloading(message):
         
         history_path = "B:/VS CODE/Telegramm bot/history.txt"
         with open(history_path, 'a') as history:
-            history.write(f"{title}\n")
+            history.write(f"{title}\n") 
+    except telebot.apihelper.ApiException:
+        with open(video_path, 'rb') as video:
+            bot.send_video(message.chat.id, video)   
+        os.remove(video_path)
 
+        history_path = "B:/VS CODE/Telegramm bot/history.txt"
+        with open(history_path, 'a') as history:
+            history.write(f"{title}\n") 
     except Exception as e:
         bot.send_message(message.chat.id, f"Error: {e}")
 
