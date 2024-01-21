@@ -1,6 +1,7 @@
 import telebot
 from pytube import YouTube
 import os
+import random
 
 bot = telebot.TeleBot("6789743997:AAHUVsgSi8B70sZJydLifRc7nMts06KwhtQ")
 
@@ -23,18 +24,19 @@ def test(message):
 @bot.message_handler(func = lambda message: "https://www.youtube.com" in message.text or "https://youtu.be" in message.text)
 def downloading(message):
     bot.send_message(message.chat.id, "Видео скачивается...")
-    
+    number_name = random.randint(1, 1000000)
     try:
         youtube_video = YouTube(message.text)
         title = youtube_video.title.replace('.', '')
+        title = title.replace("'", '')
+        title = title.replace('|', '')
         output_path = "B:/VS CODE/Telegramm bot/Downloaded Videos/"
-        
+
         youtube_video.streams.first().download(output_path=output_path)
-        
         video_path = os.path.join(output_path, title + '.mp4')
+        print(video_path)
         with open(video_path, 'rb') as video:
             bot.send_video(message.chat.id, video)
-
         os.remove(video_path)
         
         history_path = "B:/VS CODE/Telegramm bot/history.txt"
