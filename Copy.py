@@ -33,7 +33,7 @@ def downloading(message):
 
         youtube_video.streams.first().download(output_path=output_path, filename = str(number_name) + '.mp4')
         video_path = os.path.join(output_path, str(number_name) + '.mp4')
-        print(video_path)
+        print(title)
         with open(video_path, 'rb') as video:
             bot.send_video(message.chat.id, video)
         os.remove(video_path)
